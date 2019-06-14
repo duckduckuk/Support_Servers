@@ -1,0 +1,8 @@
+BAD REQUEST or Possible Attack Issue...
+
+Edit:
+/usr/local/ispconfig/security/security_settings.ini 
+
+Change: (From "yes")
+ids_anon_enabled=no
+ids_user_enabled=no
