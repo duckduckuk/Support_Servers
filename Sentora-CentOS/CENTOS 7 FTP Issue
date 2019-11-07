@@ -1,0 +1,34 @@
+Follow below the steps to download proftpd package:
+
+Please note - Install the ProFTPd - then remove it. For some reason it worked when I did that (and the installer won't
+like there already being a ProFTPd install)
+
+    Login your server with root access
+    Install EPEL
+==
+yum install epel-release
+==
+Then
+==
+yum install proftpd
+==
+    Check proftpd package with below command
+==
+yum info proftpd
+==
+Now you can install sentora on centos 7.4 without any error:
+
+======================================================
+Download the Sentora:
+
+
+wget http://sentora.org/install
+
+Make the Sentora installation script executable :
+
+chmod +x install
+
+Now execute the Sentora installation script :
+
+./install
+

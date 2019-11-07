@@ -1,0 +1,85 @@
+Process done as ROOT user.
+
+NOTICE: For CentOS servers replace apt-get with yum and replace apache2 with httpd
+
+Check to make sure mod_ssl is installed:
+On Sentora Panel go to Admin -> PHPinfo -> View Full PHP Configuration -> Search for mod_ssl
+If not, install it:
+NOTICE: For CentOS replace apt-get with yum
+Code:
+apt-get install mod_ssl
+
+Check to make sure openssl is installed:  (openssl does not mandate the install of mod_ssl in CentOS 6.x)
+On Sentora Panel go to Admin -> PHPinfo -> View Full PHP Configuration -> Search for openssl
+If not, install it:
+NOTICE: For CentOS replace apt-get with yum
+Code:
+apt-get install openssl
+
+REQUIRED for CentOS: Edit /etc/httpd/conf.d/ssl.conf and change Listen 443 to #Listen 443
+
+Next, install git and Let's Encrypt:
+NOTICE: For CentOS replace apt-get with yum
+apt-get install git
+
+git clone https://github.com/letsencrypt/letsencrypt
+
+cd letsencrypt
+
+./letsencrypt-auto --help
+
+Creating a Certificate for your domain
+You need to turn off apache before creating a certificate or you will get something like
+ 
+
+
+    The program httpd (process ID XXXX) is already listening on TCP port 80. This will prevent us from binding to that port. Please stop the httpd program temporarily and then try again.
+     
+
+
+REMINDER: Replace domain.com by your domain URL.
+NOTICE: For CentOS replace apache2 with httpd
+service apache2 stop
+
+./letsencrypt-auto certonly --standalone -d domain.com -d www.domain.com
+
+service apache2 start
+
+Changing Sentora port:
+On Sentora Panel go to Admin -> Module Admin -> Apache Config > Override a Virtualhost [Select VHost] ->
+Tick Port Override.
+Forward Port 80 to Overriden Port: 443
+Custom Entry:
+
+(Don't forget to replace domain.com with your domain's URL below:)
+ 
+SSLEngine on
+
+SSLProtocol ALL -SSLv2 -SSLv3
+
+SSLHonorCipherOrder On
+
+SSLCipherSuite ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
+
+SSLCertificateFile /etc/letsencrypt/live/domain.com/cert.pem
+
+SSLCertificateKeyFile /etc/letsencrypt/live/domain.com/privkey.pem
+
+SSLCertificateChainFile /etc/letsencrypt/live/domain.com/chain.pem
+
+# Keeping bellow for future upgrades.
+
+# Requires Apache >= 2.4
+
+SSLCompression off
+
+ 
+
+
+Save Vhost.
+
+Wait on daemon update or run it manually and restart apache.
+NOTICE: For CentOS replace apache2 with httpd
+php -q /etc/sentora/panel/bin/daemon.php
+
+service apache2 restart

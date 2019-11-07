@@ -1,0 +1,20 @@
+Upgrade SQL
+===========
+cd /tmp
+
+# Confirm the version at http://dev.mysql.com/downloads/repo/apt/
+wget https://dev.mysql.com/get/mysql-apt-config_0.8.3-1_all.deb
+
+sudo dpkg -i mysql-apt-config_*.deb
+
+# At the popup-page, select "Apply"
+
+# Install mysql-server package
+sudo apt-get update
+sudo apt-get install mysql-community-server -y
+
+--
+
+After upgrading database:
+=========================
+mysql_upgrade -p --force ; systemctl restart mysqld

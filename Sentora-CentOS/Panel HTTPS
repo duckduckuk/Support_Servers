@@ -1,0 +1,5 @@
+Edit /etc/httpd/conf.d/ssl.conf and comment out the line: Listen 443 and save. Restart apache.
+Simple fix based off my explaining to find Listen 443 and comment it out 
+(Since it should be in your httpd-vhosts.conf from doing the Sentora apache port change).
+
+Ensure https-vhosts.conf has 443 for panel not 80.

@@ -1,0 +1,5 @@
+If httpd fails to start after adding ssl goto:
+
+/etc/httpd/conf.d/ssl.conf
+
+and remove the listen :443 - there is already a 443 listen defined elsewhere.
