@@ -1,0 +1,7 @@
+
+rule "Say welcome if the door opens"
+when
+    Item SiemensByronSXPIR_One_ChimeSound received command
+then
+    AlexaEverywhere_Player.sendCommand('Hello World')
+end
