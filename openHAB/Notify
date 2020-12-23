@@ -1,0 +1,17 @@
+Install the relevant client software on Android or Firestick TV and the 
+####### app on your ohab server then...
+
+Set up a rule...
+
+rule "Notify1"
+when
+Item  FX_switch_one received command
+then
+     executeCommandLine("/etc/openhab2/scripts/notify1.sh")
+end
+
+that calls the script with contents...
+
+#!/bin/bash
+~/go/bin/nfa notify -a 192.168.1.133 -t "Jaspernet House System" -m "Lighting w$
+
