@@ -13,5 +13,6 @@ end
 that calls the script with contents...
 
 #!/bin/bash
-~/go/bin/nfa notify -a 192.168.1.133 -t "Jaspernet House System" -m "Lighting w$
+~/go/bin/nfa notify -a 192.168.1.133 -t "Jaspernet House System" -m "Lighting will turn off in the next 15 minutes" -d 5s -o top-right
+
 
