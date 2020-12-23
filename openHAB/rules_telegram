@@ -1,0 +1,21 @@
+
+rule "Send telegram with Fixed Message"
+when
+   Item xxxx changed
+then
+   sendTelegram("bot1", "This is a test message from Jaspernet House. Lights on$
+end
+
+rule "PIR Detection"
+when
+   Item SiemensByronSXPIR_One_ChimeSound received command
+then
+   sendTelegram("bot1", "PIR One Detection")
+end
+
+rule "Doorbell"
+when
+   Item SiemensByronSXDoorbell_One_ChimeSound received command
+then
+   sendTelegram("bot1", "Doorbell Rang!!!")
+end
