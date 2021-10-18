@@ -1,4 +1,4 @@
-#Backing up and Restoring a VPS Server Using Rsync
+# Backing up and Restoring a VPS Server Using Rsync
 
 ##This guide aims to show you steps required for setting up your very own file based backup folder between two SiteHost servers that you have root access on. This can be useful for performing backup restores, or migrating a VPS from one region to another without rebuilding the VPS.
 
