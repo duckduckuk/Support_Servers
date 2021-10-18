@@ -1,0 +1,83 @@
+#!/bin/bash
+
+#Create a timestamp
+date=`date "+%Y-%m-%dT%H_%M_%S"`
+
+#Source location, you can change '/' to something like /var/www/html
+source_dir="/"
+
+#Backup location on your local system
+destination_dir="/home/###USERNAME###/Documents/"
+
+#Name of Backup folder
+backup_folder_name=backup-$date
+
+#Full path of backup; concatenation of above two paths
+final_destination_dir=$destination_dir$backup_folder_name
+
+#Create backup directory
+mkdir -p $final_destination_dir
+
+#rsync options
+rsync_option="-aAXvhP"
+
+#SSH username
+ssh_user="###USERNAME###"
+
+#SSH Port
+SSHPort=22
+
+#IP address of remote host
+ip_address="###.###.###.###"
+
+#Symbolic name of latest backup
+symbolic_name_recent_backup="latest"
+
+#Exclude folders that you don't want to backup
+
+exclude_folders=(
+  "/dev"
+  "/usr"
+  "/var"
+  "/sbin"
+  "/home"
+  "/etc"
+  "/proc"
+  "/sys"
+  "/tmp"
+  "/run"
+  "/mnt"
+  "media"
+)
+
+#Change to the destination directory where rsync will pull data from remote VPS
+
+cd $destination_dir
+
+#Get the most recent snapshot folder name that will be symbolically linked to the latest folder.
+
+latest_backup_dir=$(ls -td -- backup* | head -n 1 | cut -d'/' -f1)
+
+#Place all the exclude folders in a single variable
+
+for item in "${exclude_folders[@]}"
+do
+  exclude_flags="${exclude_flags} --exclude ${item}"
+done
+
+#Remove the folder which was symbolically linked to the snapshots folder earlier
+
+if [ -L $symbolic_name_recent_backup ];
+then
+     echo "Removing previous symbolic link to the snapshots"
+     rm -rf $symbolic_name_recent_backup
+fi
+
+#Create a new symbolic link to the latest snapshots
+
+echo "Creating new symbolic link to the latest snapshots"
+$(ln -s $latest_backup_dir latest)
+
+#Run rsync
+
+rsync $rsync_option ${exclude_flags} -e  "ssh -p $SSHPort" $ssh_user@$ip_address:$source_dir $final_destination_dir || echo "rsync died with error code $?" >> /var/log/backup.log
