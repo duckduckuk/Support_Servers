@@ -1,6 +1,6 @@
 # Backing up and Restoring a VPS Server Using Rsync
 
-##This guide aims to show you steps required for setting up your very own file based backup folder between two SiteHost servers that you have root access on. This can be useful for performing backup restores, or migrating a VPS from one region to another without rebuilding the VPS.
+## This guide aims to show you steps required for setting up your very own file based backup folder between two SiteHost servers that you have root access on. This can be useful for performing backup restores, or migrating a VPS from one region to another without rebuilding the VPS.
 
 By the end of this tutorial you should have a current backup of your server and knowledge of how you can restore this backup through Rescue Mode.
 
@@ -37,7 +37,7 @@ And check whether the backup directory contains a copy of the files you copied.
 
 ls -latr /root/server_backup
 
-#Restoring your VPS
+## Restoring your VPS
 
 Firstly, put the VPS that you’d like to restore your backup onto into Rescue Mode from the SiteHost Control Panel. Make sure to note the temporary root password that’s displayed to you during this process. You will need to SSH to the server using these credentials.
 
