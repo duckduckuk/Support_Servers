@@ -11,7 +11,7 @@ Requirements:
     An understanding of how to use SSH
     Both the source and the destination server must have rsync installed.
 
-##Backing Up Your VPS
+## Backing Up Your VPS
 
 Firstly, SSH to the server that you’ll be using to store your backups on.
 
