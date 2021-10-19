@@ -1,0 +1,1 @@
+scp -r C:\path\path\path\finalfolder user@host.co.uk:/home/path/
