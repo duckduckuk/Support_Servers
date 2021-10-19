@@ -3,3 +3,5 @@ export SMF_CONFIG='@testo.com:all@test.com'
 
 Run Docker Service
 docker run -e SMF_CONFIG -p 25:25 zixia/simple-mail-forwarder
+
+docker run -t -d --restart=always -e SMF_CONFIG -p 25:25 zixia/simple-mail-forwarder
