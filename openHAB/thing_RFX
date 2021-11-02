@@ -1,1 +1,4 @@
-Bridge rfxcom:bridge:usb0 [ serialPort="/dev/ttyUSB0" 
+create rfxcom.things in /etc/openhab/things/
+add the following...
+
+Bridge rfxcom:bridge:usb0 [ serialPort="/dev/ttyUSB0" ]
