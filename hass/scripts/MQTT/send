@@ -1,0 +1,7 @@
+alias: MQTT JRT ALERT
+sequence:
+  - service: mqtt.publish
+    data:
+      topic: Yourtopichere
+      payload: Messagetexthere
+mode: single
