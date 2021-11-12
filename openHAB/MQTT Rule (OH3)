@@ -10,5 +10,6 @@ actions:
     id: "2"
     configuration:
       itemName: TPLTallLight_Color (Example Only - Modify)
-      command: OFF
+      command: OFF (Example Only - Set to something like "command: 328,100,18" if coloured bulb etc.)
     type: core.ItemCommandAction
+
