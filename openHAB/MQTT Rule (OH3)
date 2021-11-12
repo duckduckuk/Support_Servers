@@ -1,0 +1,14 @@
+triggers:
+  - id: "1"
+    configuration:
+      itemName: MQTT_Root_Item (Example Only - Modify)
+      state: STAND DOWN
+    type: core.ItemStateUpdateTrigger
+conditions: []
+actions:
+  - inputs: {}
+    id: "2"
+    configuration:
+      itemName: TPLTallLight_Color (Example Only - Modify)
+      command: OFF
+    type: core.ItemCommandAction
