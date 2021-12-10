@@ -16,3 +16,6 @@ https://raw.githubusercontent.com/technorabilia/portainer-templates/main/lsio/te
 
 ## ADVANCED 5
 https://raw.githubusercontent.com/mikestraney/portainer-templates/master/templates.json
+
+## ADVANCED 6
+https://raw.githubusercontent.com/AndyYangUK/portainer_templates/master/templates-2.1.json
