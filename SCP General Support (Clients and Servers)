@@ -1,1 +1,8 @@
+General
 scp -r C:\path\path\path\finalfolder user@host.co.uk:/home/path/
+
+Upload
+scp -r -PXXX d:\public\ user@DOMAIN.co.uk:/portainer/Files/AppData/Config/SITE/www/
+ 
+Download
+scp -r -PXXXX user@DOMAIN.co.uk:/portainer/Files/AppData/Config/SITE/www/ d:\SOURCEDIR
