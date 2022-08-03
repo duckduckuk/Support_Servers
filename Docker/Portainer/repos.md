@@ -25,3 +25,6 @@ https://raw.githubusercontent.com/mycroftwilde/portainer_templates/master/Templa
 
 ## ADVANCED 8
 https://raw.githubusercontent.com/ntv-one/portainer/main/template.json
+
+## ADVANCED 9
+https://raw.githubusercontent.com/xneo1/portainer_templates/master/Template/template.json
