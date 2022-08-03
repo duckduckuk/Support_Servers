@@ -19,3 +19,9 @@ https://raw.githubusercontent.com/mikestraney/portainer-templates/master/templat
 
 ## ADVANCED 6
 https://raw.githubusercontent.com/AndyYangUK/portainer_templates/master/templates-2.1.json
+
+## ADVANCED 7
+https://raw.githubusercontent.com/mycroftwilde/portainer_templates/master/Template/template.json
+
+## ADVANCED 8
+https://raw.githubusercontent.com/ntv-one/portainer/main/template.json
