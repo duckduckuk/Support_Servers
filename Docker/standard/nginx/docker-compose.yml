@@ -1,0 +1,12 @@
+version: '3.1'
+services:
+  #Nginx Service
+   webserver:
+     image: nginx:alpine
+     container_name: NAME
+     restart: unless-stopped
+     ports:
+       - "PORTNUMBER:80"
+       - "PORTNUMBER:443"
+     volumes:
+         - './site-content:/usr/share/nginx/html'
