@@ -1,0 +1,15 @@
+version: '3'
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - /var/run/dbus:/run/dbus:ro
+      - /etc/localtime:/etc/localtime:ro
+    devices:
+      - /dev/ttyUSB0:/dev/tty:USB0
+    restart: no
+    privileged: true
+    network_mode: host
+    volumes:
+      - /home/ubuntu/hass/config/:/config
