@@ -1,1 +1,83 @@
+SEE: realjoshbrynes
+
+I've been doing this following for quite some time in my 404 hosts to enable some simple static hosting
+
+root /var/www/html;
+
+location / {
+  index index.html index.htm;
+}
+
+Note: This will likely break your preset settings such as "Force SSL" settings for this host. (although certificates will work fine)
+For PHP support
+
+My docker compose is slightly different, I've added PHP FPM in a seperate container, and I'm exposing the host's /var/www directory to both the app and php container (the directory could be anything, but this is what I chose to use)
+
+version: "3"
+services:
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: always
+    ports:
+      # Public HTTP Port:
+      - '80:80'
+      # Public HTTPS Port:
+      - '443:443'
+      # Admin Web Port:
+      - '81:81'
+    environment:
+      # These are the settings to access your db
+      DB_MYSQL_HOST: "db"
+      DB_MYSQL_PORT: 3306
+      DB_MYSQL_USER: "npm"
+      DB_MYSQL_PASSWORD: "npm"
+      DB_MYSQL_NAME: "npm"
+      # If you would rather use Sqlite uncomment this
+      # and remove all DB_MYSQL_* lines above
+      # DB_SQLITE_FILE: "/data/database.sqlite"
+      # Uncomment this if IPv6 is not enabled on your host
+      # DISABLE_IPV6: 'true'
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+      - /var/www:/var/www
+    depends_on:
+      - db
+    links:
+      - php
+  php:
+    image: php:8-fpm
+    restart: always
+    volumes:
+      - /var/www:/var/www
+  db:
+    image: 'jc21/mariadb-aria:latest'
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'npm'
+      MYSQL_DATABASE: 'npm'
+      MYSQL_USER: 'npm'
+      MYSQL_PASSWORD: 'npm'
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+
+Finally, for those hosts that you would like to enable PHP on, you should use something like the following in the advanced tab
+
+root /var/www/html;
+
+location / {
+  index index.php index.html index.htm;
+}
+
+location ~ \.php$ {
+    try_files $uri =404;
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    fastcgi_pass php:9000;
+    fastcgi_index index.php;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+}
+
+I quite like that I can mix and match PHP and non-PHP sites quite easily on the same host. There may be a more elegant solution but this is what I've been using for quite some time, so thought I'd share it.
 
