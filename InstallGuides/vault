@@ -1,0 +1,113 @@
+ To install Docker Compose, type the following two commands:
+
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+==
+mkdir vaultwarden
+cd vaultwarden
+
+docker network create vaultwarden_network
+
+==
+
+caddy:
+    image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    container_name: reverse-proxy
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - CADDY_INGRESS_NETWORKS=bitwarden_network
+    networks:
+      - bitwarden_network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+    restart: unless-stopped
+
+---- KEYGEN
+docker run --rm -it vaultwarden/server /vaultwarden hash
+
+Once the token is generated, take the part with the single quotes, pass it to echo, and pipe it to the sed command, as shown below:
+echo 'your-authentication-token-here' | sed 's#\$#\$\$#g'
+
+Copy and save the command’s output since this is the hashed version of your Vaultwarden admin password that we’ll use in the final deployment.
+
+
+=============================
+COMPOSE
+===========================
+nano docker-compose.yaml
+Code language: CSS (css)
+
+version: '3'
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    labels:
+      caddy: your-domain-name-here
+      caddy.reverse_proxy: "{{upstreams}}"
+    restart: always
+    environment:
+      - WEBSOCKET_ENABLED=true
+      - SIGNUPS_ALLOWED=true
+      - INVITATIONS_ALLOWED=false
+      - ADMIN_TOKEN=your-admin-authentication-token-here
+      - DOMAIN=https://your-domain-name-here
+    volumes:
+      - vaultwarden_data:/data
+    networks:
+      - vaultwarden_network
+    depends_on:
+      - caddy
+
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    container_name: reverse-proxy
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - CADDY_INGRESS_NETWORKS=vaultwarden_network
+    networks:
+      - vaultwarden_network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+    restart: unless-stopped
+
+networks:
+  vaultwarden_network:
+    external: true
+volumes:
+  vaultwarden_data: {}
+  caddy_data: {}
+Code language: PHP (php)
+
+In the example above, replace the following parts with the ones that apply to you:
+
+    ADMIN_TOKEN: Replace it with the previously generated admin token so that the final variant looks like “ADMIN_TOKEN=$$argon2id$$v=19$$m=65…“
+    Important! Notice that the string is not enclosed between any quotes.
+    In the Vaultwarden’s labels section, specify the domain name to serve the service. For example, “caddy: vaultwarden.tmplinux.com“
+    In the Vaultwarden’s environment section, specify the domain name prefixed with “https://” that will serve the service. For example, “DOMAIN=https://vaultwarden.tmplinux.com “
+
+We want to pay attention to the “SIGNUPS_ALLOWED=true” environment variable. We set it to “true” because after starting Vaultwarden, we can register the user who will use the service.
+
+Immediately after that, as shown below, we will change its value to “false” and restart the containers, making user self-registration impossible. This is done from a security point of view.
+Run Vaultwarden with Docker Compose
+
+Finally, we can run our dockerized Vaultwarden stack using Docker Compose. To do this, execute the below-given command from the “vaultwarden” directory where our “docker-compose.yaml” file is located.
+
+Start and run the containers in the background:
+
+docker-compose up -d
+
+The Docker images will start downloading. The entire procedure can take seconds to a minute, depending on your internet connection speed.
+
+In the end, you should see a screen similar to the one below, informing you that your dockerized Vaultwarden installation has been successfully deployed and is up and running.
+
+
+
