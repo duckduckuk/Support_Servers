@@ -1,0 +1,49 @@
+alias: Light Alarm
+description: ""
+trigger:
+  - platform: time
+    at: "06:35:00"
+condition:
+  - condition: state
+    entity_id: binary_sensor.workday_sensor
+    state: "on"
+action:
+  - service: script.1702692125821
+    data:
+      min_mireds: 375
+      max_mireds_selector: 400
+      max_brightness_pct: 10
+      alarm_length: 10
+      steps_per_minute: 12
+      light_timeout: 0
+      target_light: light.light_alarm_lights
+  - if:
+      - condition: state
+        entity_id: light.light_alarm_lights
+        state: "on"
+    then:
+      - service: script.1702692125821
+        data:
+          min_mireds: 325
+          max_mireds_selector: 400
+          max_brightness_pct: 50
+          alarm_length: 10
+          steps_per_minute: 12
+          light_timeout: 0
+          target_light: light.light_alarm_lights
+  - if:
+      - condition: state
+        entity_id: light.light_alarm_lights
+        state: "on"
+    then:
+      - service: script.1702692125821
+        data:
+          min_mireds: 250
+          max_mireds_selector: 400
+          max_brightness_pct: 100
+          alarm_length: 5
+          steps_per_minute: 12
+          light_timeout: 25
+          target_light: light.light_alarm_lights
+mode: parallel
+max: 10
