@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+
+    # Database
+    db:
+        image: mysql:5.7
+        container_name: wpdev_database
+        restart: always
+        networks: 
+            - wpdevnetwork
+        volumes:
+            - db:/var/lib/mysql
+        ports:
+            - 8080:3306
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: wordpress
+            MYSQL_USER: wordpress
+            MYSQL_PASSWORD: wordpress
+
+    # WordPress
+    wordpress:
+        # image: wordpress:latest
+        build:
+            context: ./wordpress
+            dockerfile: Dockerfile
+        container_name: wpdev_wordpress
+        restart: always
+        depends_on: 
+            - db
+        networks: 
+            - wpdevnetwork
+        volumes:
+            - ./src:/var/www/html:rw,cached
+        ports:
+            - 1337:80
+        environment: 
+            WORDPRESS_DB_HOST: db
+            WORDPRESS_DB_USER: wordpress
+            WORDPRESS_DB_PASSWORD: wordpress
+            WORDPRESS_DB_NAME: wordpress
+            WORDPRESS_DEBUG: 1
+
+volumes:
+    db:
+    src:
+networks:
+    wpdevnetwork:
